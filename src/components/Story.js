@@ -36,7 +36,7 @@ export const Story = memo(function Story({ storyId, showRank, index }) {
           </LinkWrapper>
           {story.url && (
             <LinkWrapper>
-              {"  ("}
+              {"  ( "}
               <a rel="noopener noreferrer" href={story.url} target="_blank">
                 {getSourceUrl(story.url)}
               </a>

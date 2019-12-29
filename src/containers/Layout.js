@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
-import styled from "styled-components";
 
 import { Header } from "../components/Header";
 import StoryList from "../containers/StoryList";

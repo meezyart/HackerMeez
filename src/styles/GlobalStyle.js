@@ -6,7 +6,9 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 14px;
     line-height: 1.2;
   }
-
+  textarea, button {
+    outline: none;
+  }
   *, *:before, *:after {
     box-sizing: inherit;
   }
@@ -21,9 +23,12 @@ export const MainWrapper = styled.div`
   width: 900px;
 `;
 
-export const StoryListWrapper = styled.div`
+export const ContentWrapper = styled.div`
   background: #f6f6f0;
   padding: 1em;
+
+`;
+export const StoryListWrapper = styled(ContentWrapper)`
   .rank{
     min-width:2.7em;
   }

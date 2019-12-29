@@ -1,7 +1,7 @@
-import React, { useEffect, useState, memo } from "react";
-import styled from "styled-components";
+import React, { useEffect, useState } from "react";
 
 import { getStoryIds } from "../services/hnAPI";
+
 import { Story } from "../components/Story";
 
 import { StoryListWrapper } from "../styles/GlobalStyle";

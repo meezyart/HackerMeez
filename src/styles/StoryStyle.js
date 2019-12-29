@@ -16,17 +16,19 @@ export const RankWrapper = styled.div`
 
 export const VoteButton = styled.div`
   font-size: 0.7em;
-  margin: 2px 7px 0 2px;
+  color: #828282;
+  margin: .5em .7em 0 .2em;
   cursor: pointer;
 `;
 
 export const LinkWrapper = styled.span`
   font-size: ${props => (props.size ? props.size : ".8em")}
-  a{
+  a,button {
     margin: 0 0.2em;
     cursor: pointer;
     text-decoration: none;
     color: ${props => (props.color ? props.color : "#828282")};
+
     &:hover {
       text-decoration: underline;
     }
