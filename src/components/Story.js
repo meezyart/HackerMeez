@@ -1,7 +1,6 @@
 import React, { useEffect, useState, memo } from "react";
 import { Link } from "react-router-dom";
 
-
 import { getStory } from "../services/hnAPI";
 import { mapToTime, mapComment, getSourceUrl } from "../utils";
 
@@ -21,7 +20,7 @@ export const Story = memo(function Story({ storyId, showRank, index }) {
 
   return (
     <StoryWrapper>
-      <RankWrapper>
+      <RankWrapper className='rank'>
         {showRank && <span>{index}.</span>}
         <VoteButton>&#9650;</VoteButton>
       </RankWrapper>

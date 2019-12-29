@@ -23,5 +23,8 @@ export const MainWrapper = styled.div`
 
 export const StoryListWrapper = styled.div`
   background: #f6f6f0;
-  padding: 1em 0;
+  padding: 1em;
+  .rank{
+    min-width:2.7em;
+  }
 `;

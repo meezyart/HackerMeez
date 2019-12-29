@@ -2,16 +2,16 @@ import styled from "styled-components";
 
 export const StoryWrapper = styled.div`
   display: flex;
-  padding: 0.25em 1em;
+  padding: 0.25em 0;
   align-items: start;
   color: #828282;
+  margin-bottom: 0.2em;
 `;
 
 export const RankWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-items: end;
-  min-width: 2.5em;
 `;
 
 export const VoteButton = styled.div`
@@ -22,7 +22,7 @@ export const VoteButton = styled.div`
 
 export const LinkWrapper = styled.span`
   font-size: ${props => (props.size ? props.size : ".8em")}
-  a {
+  a{
     margin: 0 0.2em;
     cursor: pointer;
     text-decoration: none;
