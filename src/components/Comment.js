@@ -36,7 +36,7 @@ const CommentHeader = ({ kids, by, time, toggleVisible, isVisible }) => {
         <VoteButton className="vote-btn">&#9650;</VoteButton>
       </div>
       <LinkWrapper>
-        {by && `by ${by}`} | {time && mapToTime(time)}
+        {by && `by ${by} |`} {time && `${mapToTime(time)} ago`}
         {kids && (
           <>
             {"  [ "}
