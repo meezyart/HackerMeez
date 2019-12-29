@@ -1,12 +1,17 @@
 import React from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import styled from "styled-components";
+
 import { Header } from "../components/Header";
 import StoryList from "../containers/StoryList";
 import StoryDetail from "../containers/StoryDetail";
 
+import { GlobalStyle, MainWrapper } from "../styles/GlobalStyle";
+
 export const Layout = () => {
   return (
-    <>
+    <MainWrapper>
+      <GlobalStyle/>
       <Header />
       <section>
         <BrowserRouter>
@@ -18,6 +23,6 @@ export const Layout = () => {
           </Switch>
         </BrowserRouter>
       </section>
-    </>
+    </MainWrapper>
   );
 };
