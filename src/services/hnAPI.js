@@ -1,6 +1,8 @@
 import firebase from "firebase/app";
 import "firebase/database";
 
+import { selectFields } from "../selectors/"
+
 export const version = "/v0/";
 export const topStoriesUrl = `${version}topstories`;
 export const itemUrl = `${version}item/`;
@@ -8,16 +10,6 @@ export const itemUrl = `${version}item/`;
 firebase.initializeApp({
   authDomain: "hacker-news.firebaseio.com",
   databaseURL: "https://hacker-news.firebaseio.com"
-});
-
-export const selectFields = ({ id, by, title, kids, url, time, score }) => ({
-  id,
-  by,
-  kids,
-  title,
-  url,
-  time,
-  score
 });
 
 export const getItemById = async itemId => {
@@ -46,8 +38,8 @@ export const getStoryIds = async (startCount = '0', endCount = '29') => {
     .database()
     .ref(topStoriesUrl)
     .orderByKey()
-    .startAt(startCount)
-    .endAt(endCount);
+    .startAt(startCount.toString())
+    .endAt(endCount.toString());
   let results = await topStoriesRef.once("value");
   return results.val();
 };

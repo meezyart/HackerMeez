@@ -6,7 +6,7 @@ import { getCommentIds } from "../services/hnAPI";
 import { Comment } from "../components/Comment";
 import { Story } from "../components/Story";
 
-import { ContentWrapper } from "../styles/GlobalStyle";
+import { ContentWrapper, ButtonLink } from "../styles/GlobalStyle";
 import { AddCommentBox } from "../styles/CommentStyle";
 
 
@@ -17,8 +17,8 @@ export default function StoryDetail() {
   const storyId = itemId;
 
   useEffect(() => {
-    getCommentIds(storyId).then(data => setCommentIds(data));
-  }, []);
+    getCommentIds(storyId).then(data => data && setCommentIds(data));
+  }, [storyId]);
 
   return (
     <ContentWrapper>
@@ -26,11 +26,12 @@ export default function StoryDetail() {
       <AddCommentBox>
         <textarea rows="6" cols="60" />
         <br />
-        <button>Add Comment</button>
+        <ButtonLink>Add Comment</ButtonLink>
       </AddCommentBox>
       {commentIds.map(commentId => (
         <Comment key={commentId} commentId={commentId} />
       ))}
+      <ButtonLink href="/">Back Home</ButtonLink>
     </ContentWrapper>
   );
 }

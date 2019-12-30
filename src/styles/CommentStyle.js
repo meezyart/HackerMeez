@@ -2,9 +2,10 @@ import styled from "styled-components";
 
 export const AddCommentBox = styled.div`
   margin-left: 1.3em;
-  margin-bottom: 0.2em;
+  margin-bottom: 1em;
   button {
     margin-top: 1em;
+    margin-bottom: 3em;
   }
 `;
 

@@ -15,10 +15,10 @@ export const Layout = () => {
       <section>
         <BrowserRouter>
           <Switch>
-            <Route exact path="/" render={() => <Redirect to="/new/1" />} />
+            <Route exact path="/" render={() => <Redirect to="/new/0" />} />
             <Route path="/new/:page" component={StoryList} />
             <Route path="/item/:itemId" component={StoryDetail} />
-            <Route render={() => <Redirect to="/new/1" />} />
+            <Route render={() => <Redirect to="/new/0" />} />
           </Switch>
         </BrowserRouter>
       </section>
