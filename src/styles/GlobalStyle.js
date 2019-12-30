@@ -6,8 +6,10 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 16px;
     line-height: 1.2;
   }
-  h1,h3{padding: 0;
-    margin:0;}
+  h1,h3{
+    padding: 0;
+    margin:0;
+    }
   textarea, button {
     outline: none;
   }

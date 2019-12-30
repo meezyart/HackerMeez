@@ -41,7 +41,6 @@ export default function StoryList({ history }) {
   }
 
   function handleNextPage() {
-    console.log(page);
     if (+page < 17) {
       history.push(`/new/${+page + 1}`);
     } else {
