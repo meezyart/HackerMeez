@@ -14,13 +14,14 @@ import {
 
 export const Comment = ({ commentId }) => {
   const [comment, setComment] = useState([]);
-  
+
   useEffect(() => {
-    try {
-      getComment(commentId).then(data => setComment(data));
-    } catch (error) {
-      console.error(error);
-    }
+    getComment(commentId)
+      .then(data => setComment(data))
+      .catch(error => {
+        console.log("Comment: We are getting this error:");
+        console.error(error);
+      });
   }, [commentId]);
 
   return (
