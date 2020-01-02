@@ -1,31 +1,50 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-
+//  api
 import { getStoryIds } from "../services/hnAPI";
-
+// components
 import { Story } from "../components/Story";
-
+// styles
 import { StoryListWrapper, ButtonLink } from "../styles/GlobalStyle";
-import { LINKS_PER_PAGE, MAX_PAGES} from "../constants";
-
+// constants
+import { LINKS_PER_PAGE, MAX_STORIES, MAX_PAGES } from "../constants";
 
 export default function StoryList({ history }) {
   const [storyIds, setStoryIds] = useState([]);
+  const [currentPage, setCurrentPage] = useState({});
   let { page } = useParams();
 
   // for pagination
-  let startStory = LINKS_PER_PAGE * +page,
-    endStory = LINKS_PER_PAGE + LINKS_PER_PAGE * +page - 1;
+  let startStory = LINKS_PER_PAGE * +page;
+  let endStory = startStory + LINKS_PER_PAGE - 1;
+
+  // Coverts page to a number
+  useEffect(() => {
+    setCurrentPage(+page);
+  }, [page]);
 
   useEffect(() => {
-    getStoryIds(startStory, endStory).then(
-      data => data && handleStoryIds(data)
-    );
+    getStoryIds(startStory, endStory)
+      .then(data => {
+        handleStoryIds(data);
+      })
+      .catch(error => {
+        console.log("StoryList: We are getting this error:");
+        console.error(error);
+      });
   }, [page, startStory, endStory]);
 
   /*
-   * Fixes weird quirk cause by querying the db with orderByKey()
-   * returns a array for for the first call and a object after 2 calls.
+   * Redirects if the page number is over 17
+   * page 16 is where the 500th article is reached
+   * //TODO MOVE OUT SIDE THIS FUNCTION
+   */
+  if (currentPage >= MAX_PAGES) {
+    history.push(`/404`);
+  }
+  /*
+   * Fixes weird quirk cause by querying the db with orderByKey().
+   * Returns an array for the first call and an object after 2 calls.
    */
   function handleStoryIds(ids) {
     if (typeof ids === "object") {
@@ -34,25 +53,16 @@ export default function StoryList({ history }) {
       return setStoryIds(ids);
     }
   }
-  // Redirects if the page number is over 17
-  if (+page >= MAX_PAGES) {
-    page = "0";
-    history.push(`/new/0`);
-  }
 
   function handleNextPage() {
-    if (+page < 17) {
-      history.push(`/new/${+page + 1}`);
-    } else {
-      page = "0";
-      history.push(`/new/0`);
+    if (endStory < MAX_STORIES) {
+      history.push(`/new/${currentPage + 1}`);
     }
   }
 
   return (
     <StoryListWrapper>
-      {storyIds &&
-        storyIds.map((storyId, index) => (
+      {storyIds.map((storyId, index) => (
           <Story
             key={storyId}
             storyId={storyId}
@@ -60,7 +70,10 @@ export default function StoryList({ history }) {
             index={startStory + index + 1}
           />
         ))}
-      <ButtonLink onClick={handleNextPage}>More</ButtonLink>
+        {/* Hides button when the 500th article is reached */}
+      <ButtonLink hidden={endStory > MAX_STORIES} onClick={handleNextPage}>
+        More
+      </ButtonLink>
     </StoryListWrapper>
   );
 }
