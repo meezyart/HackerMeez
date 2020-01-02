@@ -1,9 +1,13 @@
 import styled from "styled-components";
 
 export const AddCommentBox = styled.div`
+  display:flex;
+  align-items:start;
+  flex-direction: column;
   margin-left: 1.3em;
   margin-bottom: 1em;
   button {
+    display:block;
     margin-top: 1em;
     margin-bottom: 3em;
   }
