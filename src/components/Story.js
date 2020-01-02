@@ -1,9 +1,12 @@
 import React, { useEffect, useState, memo } from "react";
 import { Link } from "react-router-dom";
-
+//api
 import { getStory } from "../services/hnAPI";
+//components
+import { OutBoundLink } from "./OutBoundLink";
+//helpers
 import { mapToTime, mapComment, getSourceUrl } from "../utils";
-
+//styles
 import {
   StoryWrapper,
   RankWrapper,
@@ -15,49 +18,50 @@ export const Story = memo(function Story({ storyId, showRank, index }) {
   const [story, setStory] = useState({});
 
   useEffect(() => {
-    getStory(storyId).then(data => data.title && setStory(data));
+    getStory(storyId).then(
+      data => {
+        setStory(data);
+      }).catch(error => {
+        console.log("Story: We are getting this error:");
+        console.error(error);
+      });
   }, [storyId]);
-
   return (
     <StoryWrapper>
-      <RankWrapper className='rank'>
+      <RankWrapper className="rank">
         {showRank && <span>{index}.</span>}
-        <VoteButton>&#9650;</VoteButton>
+        {showRank && <VoteButton>&#9650;</VoteButton>}
       </RankWrapper>
       <div>
         <div>
-          <LinkWrapper size="1em" color="#262421">
-            <a
-              href={story.url || `/item/${storyId}`}
-              rel="noopener noreferrer"
-              target="_blank">
+          {/* used define the larger and black text */}
+          <LinkWrapper large primary>
+            <OutBoundLink url={story.url || `/item/${storyId}`}>
               {story.title}
-            </a>
+            </OutBoundLink>
           </LinkWrapper>
           {story.url && (
             <LinkWrapper>
               {"  ( "}
-              <a rel="noopener noreferrer" href={story.url} target="_blank">
+              <OutBoundLink url={story.url}>
                 {getSourceUrl(story.url)}
-              </a>
+              </OutBoundLink>
               {")"}
             </LinkWrapper>
           )}
         </div>
-        <LinkWrapper size=".75em">
-          {story.score} votes
+        <LinkWrapper>
+          {story.score && `${story.score} votes`}
           {"  "}
-          <Link to={`/item/${storyId}`}>by {story.by}</Link>
-          {"  |  "}
+          {story.by && <Link to={`/item/${storyId}`}>{`by ${story.by}`}</Link>}
+          {story.by && "  |  "}
+          {story.time && (
+            <Link to={`/item/${storyId}`}>{`${mapToTime(story.time)}`}</Link>
+          )}
+          {story.time && "  |  "}
           <Link to={`/item/${storyId}`}>
-            {story.time && `${mapToTime(story.time)} ago`}
+            {story.kids ? mapComment(story.kids.length) : "discuss"}
           </Link>
-          {"  |  "}
-          {
-            <Link to={`/item/${storyId}`}>
-              {story.kids ? mapComment(story.kids.length) : "discuss"}
-            </Link>
-          }
         </LinkWrapper>
       </div>
     </StoryWrapper>

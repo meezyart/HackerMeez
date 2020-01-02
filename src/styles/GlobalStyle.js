@@ -62,6 +62,7 @@ export const ButtonLink = styled.a`
   border: none;
   font-size: 0.8rem;
   font-weight: 600;
+  display: ${props => (props.hidden ? `none` : `inline-block`)}
   text-transform: uppercase;
   cursor: pointer;
   &:hover {

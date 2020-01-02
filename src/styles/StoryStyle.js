@@ -22,13 +22,17 @@ export const VoteButton = styled.div`
 `;
 
 export const LinkWrapper = styled.span`
-  font-size: ${props => (props.size ? props.size : ".8em")}
+  font-size: ${props => (props.large ? `1em` : `0.75em`)}
   a,button {
     margin: 0 0.2em;
     cursor: pointer;
+    color: ${props => (props.primary ? `#262421` : `#828282`)};
     text-decoration: none;
-    color: ${props => (props.color ? props.color : "#828282")};
 
+
+    &:visited{
+      color:#828282
+    }
     &:hover {
       text-decoration: underline;
     }
