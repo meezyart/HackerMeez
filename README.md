@@ -9,7 +9,7 @@ In the project directory, you can run:
 
 ### `yarn install` or `yarn`
 
-Installs all the pessary dependencies to the project.
+Installs all the necessary dependencies to this project.
 
 
 ### `yarn start`
