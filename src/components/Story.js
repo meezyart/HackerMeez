@@ -7,9 +7,8 @@ import { getItemById as getStory } from "../services/hnAPI";
 //components
 import { OutBoundLink } from "./OutBoundLink";
 //helpers
-import { mapToTime, mapComment, getSourceUrl } from "../utils";
+import { mapToTime, getSourceUrl } from "../utils";
 //styles
-
 import "react-placeholder/lib/reactPlaceholder.css";
 import {
   StoryWrapper,
@@ -32,12 +31,26 @@ export const Story = memo(function Story({ storyId, showRank, index }) {
       });
   }, [storyId]);
 
+  /*
+   * Takes the comments length returns with `comment` or `comments` string.
+   * If there is 0 comments it will return a `discuss` string
+   */
+  const mapComment = commentLen => {
+    if (commentLen >= 2) {
+      return `${commentLen} comments`;
+    }
+    if (commentLen === 1) {
+      return `${commentLen} comment`;
+    }
+    return `discuss`;
+  };
+
   const { title, url, by, kids, time, score } = story;
   // display variables
   const rank = showRank ? <span>{index}.</span> : null;
   // some stories have titles but no urls
   const titleUrl = url || `/item/${storyId}`;
-  const titlePresent = story.title && story.title.length > 0;
+  const titlePresent = title && title.length > 0;
   const author = `by ${by}`;
   const commentLength = kids ? mapComment(kids.length) : "discuss";
   const timestamp = `${mapToTime(time)}`;

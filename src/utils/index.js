@@ -1,16 +1,3 @@
-/*
- * Takes the comments length returns with `comment` or `comments` string.
- * If there is 0 comments it will return a `discuss` string
- */
-export const mapComment = commentLen => {
-  if (commentLen >= 2) {
-    return `${commentLen} comments`;
-  }
-  if (commentLen === 1) {
-    return `${commentLen} comment`;
-  }
-  return `discuss`;
-};
 
 export function getSourceUrl(url) {
   const regex = /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n]+)/;
