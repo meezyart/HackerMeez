@@ -16,7 +16,7 @@ export default function StoryList({ history }) {
 
   // for pagination
   let startStory = LINKS_PER_PAGE * +page;
-  let endStory = startStory + LINKS_PER_PAGE - 1;
+  let endStory = LINKS_PER_PAGE + startStory - 1;
 
   // Coverts page to a number
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function StoryList({ history }) {
   useEffect(() => {
     getStoryIds(startStory, endStory)
       .then(data => {
-        handleStoryIds(data);
+        setStoryIds(data);
       })
       .catch(error => {
         console.log("StoryList: We are getting this error:");
@@ -35,24 +35,12 @@ export default function StoryList({ history }) {
   }, [page, startStory, endStory]);
 
   /*
-   * Redirects if the page number is over 17
-   * page 16 is where the 500th article is reached
-   * //TODO MOVE OUT SIDE THIS FUNCTION
+   * Redirects if the start story is over 500
    */
-  if (currentPage >= MAX_PAGES) {
+  if (startStory > MAX_STORIES) {
     history.push(`/404`);
   }
-  /*
-   * Fixes weird quirk cause by querying the db with orderByKey().
-   * Returns an array for the first call and an object after 2 calls.
-   */
-  function handleStoryIds(ids) {
-    if (typeof ids === "object") {
-      return setStoryIds(Object.values(ids));
-    } else {
-      return setStoryIds(ids);
-    }
-  }
+
 
   function handleNextPage() {
     if (endStory < MAX_STORIES) {
