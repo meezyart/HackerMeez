@@ -5,9 +5,9 @@ import { getStoryIds } from "../services/hnAPI";
 // components
 import { Story } from "../components/Story";
 // styles
-import { StoryListWrapper, ButtonLink } from "../styles/GlobalStyle";
+import { ContentWrapper, ButtonLink } from "../styles/GlobalStyle";
 // constants
-import { LINKS_PER_PAGE, MAX_STORIES, MAX_PAGES } from "../constants";
+import { LINKS_PER_PAGE, MAX_STORIES } from "../constants";
 
 export default function StoryList({ history }) {
   const [storyIds, setStoryIds] = useState([]);
@@ -49,7 +49,7 @@ export default function StoryList({ history }) {
   }
 
   return (
-    <StoryListWrapper>
+    <ContentWrapper>
       {storyIds.map((storyId, index) => (
           <Story
             key={storyId}
@@ -62,6 +62,6 @@ export default function StoryList({ history }) {
       <ButtonLink hidden={endStory > MAX_STORIES} onClick={handleNextPage}>
         More
       </ButtonLink>
-    </StoryListWrapper>
+    </ContentWrapper>
   );
 }

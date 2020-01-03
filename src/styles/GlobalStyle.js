@@ -76,8 +76,3 @@ export const ContentWrapper = styled.div`
   border-bottom: 2px solid #f68423;
 `;
 
-export const StoryListWrapper = styled(ContentWrapper)`
-  .rank {
-    min-width: 2.7em;
-  }
-`;
