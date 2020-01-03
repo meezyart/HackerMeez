@@ -1,12 +1,16 @@
 import React, { useEffect, useState, memo } from "react";
+import ReactPlaceholder from "react-placeholder";
+
 import { Link } from "react-router-dom";
 //api
-import { getStory } from "../services/hnAPI";
+import { getItemById as getStory } from "../services/hnAPI";
 //components
 import { OutBoundLink } from "./OutBoundLink";
 //helpers
 import { mapToTime, mapComment, getSourceUrl } from "../utils";
 //styles
+
+import "react-placeholder/lib/reactPlaceholder.css";
 import {
   StoryWrapper,
   RankWrapper,
@@ -18,52 +22,65 @@ export const Story = memo(function Story({ storyId, showRank, index }) {
   const [story, setStory] = useState({});
 
   useEffect(() => {
-    getStory(storyId).then(
-      data => {
+    getStory(storyId)
+      .then(data => {
         setStory(data);
-      }).catch(error => {
+      })
+      .catch(error => {
         console.log("Story: We are getting this error:");
         console.error(error);
       });
   }, [storyId]);
+
+  const { title, url, by, kids, time, score } = story;
+  // display variables
+  const rank = showRank ? <span>{index}.</span> : null;
+  // some stories have titles but no urls
+  const titleUrl = url || `/item/${storyId}`;
+  const titlePresent = story.title && story.title.length > 0;
+  const author = `by ${by}`;
+  const commentLength = kids ? mapComment(kids.length) : "discuss";
+  const timestamp = `${mapToTime(time)}`;
+  const voteCount = `${score} votes`;
+  const smallUrl = url ? (
+    <LinkWrapper>
+      {"  ( "}
+      <OutBoundLink url={url}>{getSourceUrl(url)}</OutBoundLink>
+      {")"}
+    </LinkWrapper>
+  ) : null;
+
   return (
-    <StoryWrapper>
-      <RankWrapper className="rank">
-        {showRank && <span>{index}.</span>}
-        {showRank && <VoteButton>&#9650;</VoteButton>}
-      </RankWrapper>
-      <div>
+    <ReactPlaceholder
+      type="text"
+      showLoadingAnimation={true}
+      ready={titlePresent}
+      rows={2}
+      color="#E0E0E0">
+      <StoryWrapper>
+        <RankWrapper showRank>
+          {rank}
+          <VoteButton>&#9650;</VoteButton>
+        </RankWrapper>
         <div>
-          {/* used define the larger and black text */}
-          <LinkWrapper large primary>
-            <OutBoundLink url={story.url || `/item/${storyId}`}>
-              {story.title}
-            </OutBoundLink>
-          </LinkWrapper>
-          {story.url && (
-            <LinkWrapper>
-              {"  ( "}
-              <OutBoundLink url={story.url}>
-                {getSourceUrl(story.url)}
-              </OutBoundLink>
-              {")"}
+          <div>
+            {/* used define the larger and black text */}
+            <LinkWrapper large primary>
+              <OutBoundLink url={titleUrl}>{title}</OutBoundLink>
             </LinkWrapper>
-          )}
+            {smallUrl}
+          </div>
+          <LinkWrapper>
+            {voteCount}
+            {"  "}
+            <Link to={`/item/${storyId}`}>{author}</Link>
+            {"  |  "}
+            <Link to={`/item/${storyId}`}>{timestamp}</Link>
+            {"  |  "}
+            <Link to={`/item/${storyId}`}>{commentLength}</Link>
+          </LinkWrapper>
         </div>
-        <LinkWrapper>
-          {story.score && `${story.score} votes`}
-          {"  "}
-          {story.by && <Link to={`/item/${storyId}`}>{`by ${story.by}`}</Link>}
-          {story.by && "  |  "}
-          {story.time && (
-            <Link to={`/item/${storyId}`}>{`${mapToTime(story.time)}`}</Link>
-          )}
-          {story.time && "  |  "}
-          <Link to={`/item/${storyId}`}>
-            {story.kids ? mapComment(story.kids.length) : "discuss"}
-          </Link>
-        </LinkWrapper>
-      </div>
-    </StoryWrapper>
+      </StoryWrapper>
+    </ReactPlaceholder>
   );
 });

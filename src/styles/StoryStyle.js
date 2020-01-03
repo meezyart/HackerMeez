@@ -12,17 +12,20 @@ export const RankWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-items: end;
+  min-width: ${props => (props.showRank || `2.7em` )};;
 `;
 
 export const VoteButton = styled.div`
   font-size: 0.7em;
   color: #828282;
-  margin: .5em .7em 0 .2em;
+  margin-right: .7em;
+  margin-left: .2em;
+  margin-top: ${props => (props.small ? `.2em` : `.5em`)};
   cursor: pointer;
 `;
 
 export const LinkWrapper = styled.span`
-  font-size: ${props => (props.large ? `1em` : `0.75em`)}
+  font-size: ${props => (props.large ? `1em` : `0.75em`)};
   a,button {
     margin: 0 0.2em;
     cursor: pointer;
