@@ -1,8 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/database";
 
-import { selectFields } from "../selectors/";
-
 export const version = "/v0/";
 export const topStoriesUrl = `${version}topstories`;
 export const itemUrl = `${version}item/`;
@@ -29,35 +27,6 @@ export const getItemById = async itemId => {
   return results;
 };
 
-export const getComment = async commentId => {
-  try {
-    let results = await getItemById(commentId);
-    return results;
-  } catch (error) {
-    console.log("getComment: We are getting this error:");
-    console.error(error);
-  }
-};
-
-export const getCommentIds = async storyId => {
-  try {
-    let results = await getItemById(storyId);
-    return results.kids;
-  } catch (error) {
-    console.log("getCommentIds: We are getting this error:");
-    console.error(error);
-  }
-};
-
-export const getStory = async storyId => {
-  try {
-    let results = await getItemById(storyId);
-    return selectFields(results);
-  } catch (error) {
-    console.log("getStory: We are getting this error:");
-    console.error(error);
-  }
-};
 export const getStoryIds = async (startCount = "0", endCount = "29") => {
   const topStoriesRef = firebase
     .database()
@@ -77,5 +46,14 @@ export const getStoryIds = async (startCount = "0", endCount = "29") => {
       results = error;
     }
   );
-  return results;
+
+   /*
+   * Fixes weird quirk cause by querying the db with orderByKey().
+   * Returns an array for the first call and an object after 2 calls.
+   */
+    if (typeof results === "object") {
+      return Object.values(results);
+    } else {
+      return results;
+    }
 };
