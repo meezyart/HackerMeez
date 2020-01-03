@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 // api
-import { getCommentIds } from "../services/hnAPI";
+import { getItemById as getCommentIds } from "../services/hnAPI";
 // components
 import { Comment } from "../components/Comment";
 import { Story } from "../components/Story";
@@ -19,7 +19,7 @@ export default function StoryDetail() {
   useEffect(() => {
     getCommentIds(storyId)
       .then(data => {
-        setCommentIds(data);
+        setCommentIds(data.kids);
       })
       .catch(error => {
         console.log("StoryDetail: We are getting this error:");
@@ -29,7 +29,7 @@ export default function StoryDetail() {
 
   return (
     <ContentWrapper>
-      <Story storyId={storyId} />
+      <Story storyId={storyId}  />
       <AddCommentBox>
         <textarea rows="6" cols="60" />
         <ButtonLink>Add Comment</ButtonLink>
