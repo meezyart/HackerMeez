@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import ReactPlaceholder from "react-placeholder";
 // api
-import { getComment } from "../services/hnAPI";
+import { getItemById as getComment } from "../services/hnAPI";
 // utils
 import { mapToTime } from "../utils";
 // styles
+import "react-placeholder/lib/reactPlaceholder.css";
 import { VoteButton, LinkWrapper } from "../styles/StoryStyle";
 import {
   CommentWrapper,
@@ -33,40 +35,49 @@ export const Comment = ({ commentId }) => {
 };
 
 const CommentHeader = ({ kids, by, time, toggleVisible, isVisible }) => {
+  const author = by ? `by ${by} |` : null;
+  const timeStamp = author && time ? `${mapToTime(time)} ago` : null;
+  /* &#9650; is Html unicode for the up arrow */
+  const voteUpArrow = author ? <VoteButton small>&#9650;</VoteButton> : null;
+  // set up to hide the comments
+  const commentCount = kids ? (
+    <>
+      {"  [ "}
+      <button onClick={toggleVisible}>
+        {isVisible ? "hide" : `+${kids.length}`}
+      </button>
+      {"]"}
+    </>
+  ) : null;
   return (
     <CommentHeaderWrapper>
-      {/* &#9650; is Html unicode for the up arrow */}
-      {by && <VoteButton className="vote-btn">&#9650;</VoteButton>}
+      {voteUpArrow}
       <LinkWrapper>
-        {by && `by ${by} |`} {time && `${mapToTime(time)} ago`}
-        {kids && (
-          <>
-            {"  [ "}
-            <button onClick={toggleVisible}>
-              {isVisible ? "hide" : `+${kids.length}`}
-            </button>
-            {"]"}
-          </>
-        )}
+        {author} {timeStamp} {commentCount}
       </LinkWrapper>
     </CommentHeaderWrapper>
   );
 };
 
-const CommentBody = ({ text, kids }) => {
+const CommentBody = ({ text, kids, time }) => {
+  const children = kids
+    ? kids.map(kidId => {
+        return <Comment key={kidId} commentId={kidId} />;
+      })
+    : null;
+
   return (
-    <>
+    <ReactPlaceholder
+      type="text"
+      showLoadingAnimation={true}
+      ready={time}
+      rows={1}
+      color="#E0E0E0">
       <CommentParent>
         {/* This was used to handle the html tags in the text from api  */}
         <div dangerouslySetInnerHTML={{ __html: text }} />
       </CommentParent>
-      <CommentChildren>
-        {kids
-          ? kids.map(kidId => {
-              return <Comment key={kidId} commentId={kidId} />;
-            })
-          : ""}
-      </CommentChildren>
-    </>
+      <CommentChildren>{children}</CommentChildren>
+    </ReactPlaceholder>
   );
 };

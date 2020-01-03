@@ -4,13 +4,9 @@ export const AddCommentBox = styled.div`
   display:flex;
   align-items:start;
   flex-direction: column;
+  justify-content: space-between;
   margin-left: 1.3em;
-  margin-bottom: 1em;
-  button {
-    display:block;
-    margin-top: 1em;
-    margin-bottom: 3em;
-  }
+  margin-top: .8em;
 `;
 
 export const CommentWrapper = styled.div`
@@ -28,9 +24,6 @@ export const CommentHeaderWrapper = styled.div`
     padding: 0;
     cursor: pointer;
     font-size: 0.6rem;
-  }
-  .vote-btn {
-    margin-top: 0.2em;
   }
 `;
 
