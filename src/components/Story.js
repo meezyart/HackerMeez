@@ -2,13 +2,10 @@ import React, { useEffect, useState, memo } from "react";
 import ReactPlaceholder from "react-placeholder";
 
 import { Link } from "react-router-dom";
-//api
 import { getItemById as getStory } from "../services/hnAPI";
-//components
 import { OutBoundLink } from "./OutBoundLink";
-//helpers
 import { mapToTime, getSourceUrl } from "../utils";
-//styles
+import { UP_ARROW } from "../constants";
 import "react-placeholder/lib/reactPlaceholder.css";
 import {
   StoryWrapper,
@@ -30,20 +27,6 @@ export const Story = memo(function Story({ storyId, showRank, index }) {
         console.error(error);
       });
   }, [storyId]);
-
-  /*
-   * Takes the comments length returns with `comment` or `comments` string.
-   * If there is 0 comments it will return a `discuss` string
-   */
-  const mapComment = commentLen => {
-    if (commentLen >= 2) {
-      return `${commentLen} comments`;
-    }
-    if (commentLen === 1) {
-      return `${commentLen} comment`;
-    }
-    return `discuss`;
-  };
 
   const { title, url, by, kids, time, score } = story;
   // display variables
@@ -73,7 +56,7 @@ export const Story = memo(function Story({ storyId, showRank, index }) {
       <StoryWrapper>
         <RankWrapper showRank>
           {rank}
-          <VoteButton>&#9650;</VoteButton>
+          <VoteButton>{UP_ARROW}</VoteButton>
         </RankWrapper>
         <div>
           <div>
@@ -97,3 +80,17 @@ export const Story = memo(function Story({ storyId, showRank, index }) {
     </ReactPlaceholder>
   );
 });
+
+/*
+ * Takes the comments length returns with `comment` or `comments` string.
+ * If there is 0 comments it will return a `discuss` string
+ */
+const mapComment = commentLen => {
+  if (commentLen >= 2) {
+    return `${commentLen} comments`;
+  }
+  if (commentLen === 1) {
+    return `${commentLen} comment`;
+  }
+  return `discuss`;
+};
