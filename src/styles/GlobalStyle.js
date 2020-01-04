@@ -1,4 +1,5 @@
 import styled, { createGlobalStyle } from "styled-components";
+import { Link } from "react-router-dom";
 
 export const GlobalStyle = createGlobalStyle`
   html {
@@ -53,7 +54,7 @@ export const MainWrapper = styled.div`
   width: 1120px;
 `;
 
-export const ButtonLink = styled.a`
+export const ButtonLink = styled(Link)`
   margin-top: 1em;
   display: inline-block;
   padding: 0.5em 1.8em;
@@ -70,7 +71,8 @@ export const ButtonLink = styled.a`
   }
 `;
 
-export const ContentWrapper = styled.div`
+
+export const ContentWrapper = styled.section`
   background: #f6f6f0;
   padding: 0.8em 1.2em 1.5em;
   border-bottom: 2px solid #f68423;
