@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
-// api
 import { getItemById as getCommentIds } from "../services/hnAPI";
-// components
+
 import { Comment } from "../components/Comment";
 import { Story } from "../components/Story";
-// styles
-import { ContentWrapper, ButtonLink } from "../styles/GlobalStyle";
+
+import {  ButtonLink } from "../styles/GlobalStyle";
 import { AddCommentBox } from "../styles/CommentStyle";
 
 export default function StoryDetail() {
@@ -28,7 +27,7 @@ export default function StoryDetail() {
   }, [storyId]);
 
   return (
-    <ContentWrapper>
+    <>
       <Story storyId={storyId}  />
       <AddCommentBox>
         <textarea rows="6" cols="60" />
@@ -37,7 +36,7 @@ export default function StoryDetail() {
       {commentIds.map(commentId => (
         <Comment key={commentId} commentId={commentId} />
       ))}
-      <ButtonLink href="/">Back Home</ButtonLink>
-    </ContentWrapper>
+      <ButtonLink to="/new/0">Back Home</ButtonLink>
+    </>
   );
 }
