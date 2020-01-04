@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import ReactPlaceholder from "react-placeholder";
-// api
+
 import { getItemById as getComment } from "../services/hnAPI";
-// utils
 import { mapToTime } from "../utils";
-// styles
+import { UP_ARROW } from "../constants";
 import "react-placeholder/lib/reactPlaceholder.css";
 import { VoteButton, LinkWrapper } from "../styles/StoryStyle";
 import {
@@ -16,6 +15,7 @@ import {
 
 export const Comment = ({ commentId }) => {
   const [comment, setComment] = useState([]);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     getComment(commentId)
@@ -26,10 +26,20 @@ export const Comment = ({ commentId }) => {
       });
   }, [commentId]);
 
+  const toggleVisible = () => {
+    setIsVisible(!isVisible);
+  };
+
   return (
     <CommentWrapper>
-      <CommentHeader {...comment} />
-      <CommentBody {...comment} />
+      <CommentHeader
+        {...comment}
+        toggleVisible={() => toggleVisible()}
+        isVisible={isVisible}
+      />
+      <div hidden={isVisible}>
+        <CommentBody {...comment} />
+      </div>
     </CommentWrapper>
   );
 };
@@ -37,14 +47,12 @@ export const Comment = ({ commentId }) => {
 const CommentHeader = ({ kids, by, time, toggleVisible, isVisible }) => {
   const author = by ? `by ${by} |` : null;
   const timeStamp = author && time ? `${mapToTime(time)} ago` : null;
-  /* &#9650; is Html unicode for the up arrow */
-  const voteUpArrow = author ? <VoteButton small>&#9650;</VoteButton> : null;
-  // set up to hide the comments
+  const voteUpArrow = author ? <VoteButton small>{UP_ARROW}</VoteButton> : null;
   const commentCount = kids ? (
     <>
       {"  [ "}
       <button onClick={toggleVisible}>
-        {isVisible ? "hide" : `+${kids.length}`}
+        {isVisible ? `+${kids.length}` : "hide"}
       </button>
       {"]"}
     </>
@@ -60,12 +68,6 @@ const CommentHeader = ({ kids, by, time, toggleVisible, isVisible }) => {
 };
 
 const CommentBody = ({ text, kids, time }) => {
-  const children = kids
-    ? kids.map(kidId => {
-        return <Comment key={kidId} commentId={kidId} />;
-      })
-    : null;
-
   return (
     <ReactPlaceholder
       type="text"
@@ -77,7 +79,13 @@ const CommentBody = ({ text, kids, time }) => {
         {/* This was used to handle the html tags in the text from api  */}
         <div dangerouslySetInnerHTML={{ __html: text }} />
       </CommentParent>
-      <CommentChildren>{children}</CommentChildren>
+      <CommentChildren>
+        {kids
+          ? kids.map(kidId => {
+              return <Comment key={kidId} commentId={kidId} />;
+            })
+          : null}
+      </CommentChildren>
     </ReactPlaceholder>
   );
 };
