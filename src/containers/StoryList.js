@@ -1,67 +1,53 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
-//  api
-import { getStoryIds } from "../services/hnAPI";
-// components
+import React from "react";
+import ReactPlaceholder from "react-placeholder";
+
 import { Story } from "../components/Story";
-// styles
-import { ContentWrapper, ButtonLink } from "../styles/GlobalStyle";
-// constants
-import { LINKS_PER_PAGE, MAX_STORIES } from "../constants";
+import { ButtonLink } from "../styles/GlobalStyle";
+import { LINKS_PER_PAGE } from "../constants";
+import { usePageNumber, useStoryIds } from "../hooks";
+import { Error404 } from "./Error404";
 
-export default function StoryList({ history }) {
-  const [storyIds, setStoryIds] = useState([]);
-  const [currentPage, setCurrentPage] = useState({});
-  let { page } = useParams();
+export default function StoryList() {
+  let { currentPage } = usePageNumber();
+  const storyIds = useStoryIds(currentPage);
+  const MAX_STORIES = storyIds.length;
 
-  // for pagination
-  let startStory = LINKS_PER_PAGE * +page;
-  let endStory = LINKS_PER_PAGE + startStory - 1;
+  // For pagination
+  let startStory = LINKS_PER_PAGE * currentPage;
+  let endStory = LINKS_PER_PAGE + startStory;
+  let storySet = storyIds.slice(startStory, endStory);
+  let storySetLoaded = storySet.length > 0;
 
-  // Coverts page to a number
-  useEffect(() => {
-    setCurrentPage(+page);
-  }, [page]);
-
-  useEffect(() => {
-    getStoryIds(startStory, endStory)
-      .then(data => {
-        setStoryIds(data);
-      })
-      .catch(error => {
-        console.log("StoryList: We are getting this error:");
-        console.error(error);
-      });
-  }, [page, startStory, endStory]);
-
-  /*
-   * Redirects if the start story is over 500
-   */
-  if (startStory > MAX_STORIES) {
-    history.push(`/404`);
-  }
-
-
-  function handleNextPage() {
-    if (endStory < MAX_STORIES) {
-      history.push(`/new/${currentPage + 1}`);
-    }
-  }
+  // For more button
+  let hasMore = endStory < MAX_STORIES;
+  const moreLink = `/new/${currentPage + 1}`;
+  
+  // edge case If someone types in /new/(number > max pages)
+  const noStoriesLeft =
+    !hasMore && storyIds.length > 0 && storySet.length === 0;
 
   return (
-    <ContentWrapper>
-      {storyIds.map((storyId, index) => (
-          <Story
-            key={storyId}
-            storyId={storyId}
-            showRank={true}
-            index={startStory + index + 1}
-          />
-        ))}
-        {/* Hides button when the 500th article is reached */}
-      <ButtonLink hidden={endStory > MAX_STORIES} onClick={handleNextPage}>
-        More
-      </ButtonLink>
-    </ContentWrapper>
+    <>
+      {!noStoriesLeft ? (
+        <ReactPlaceholder
+          type="text"
+          showLoadingAnimation={true}
+          ready={storySetLoaded}
+          rows={3}
+          color="#E0E0E0">
+          {storySet.map((storyId, index) => (
+            <Story
+              key={storyId}
+              storyId={storyId}
+              showRank={true}
+              index={startStory + index + 1}
+            />
+          ))}
+          {hasMore && <ButtonLink to={moreLink}>More</ButtonLink>}
+        </ReactPlaceholder>
+      ) : (
+        <Error404 message="InValid Page URL " />
+      )}
+    </>
   );
 }
