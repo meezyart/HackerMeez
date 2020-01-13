@@ -1,8 +1,8 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { memo } from "react";
 import ReactPlaceholder from "react-placeholder";
 
 import { Link } from "react-router-dom";
-import { getItemById as getStory } from "../services/hnAPI";
+import { useFetchItemsByIds as getStory } from "../hooks";
 import { OutBoundLink } from "./OutBoundLink";
 import { mapToTime, getSourceUrl } from "../utils";
 import { UP_ARROW } from "../constants";
@@ -15,25 +15,17 @@ import {
 } from "../styles/StoryStyle";
 
 export const Story = memo(function Story({ storyId, showRank, index }) {
-  const [story, setStory] = useState({});
-
-  useEffect(() => {
-    getStory(storyId)
-      .then(data => {
-        setStory(data);
-      })
-      .catch(error => {
-        console.log("Story: We are getting this error:");
-        console.error(error);
-      });
-  }, [storyId]);
+  // returns story object fetched by the id
+  const story = getStory(storyId);
 
   const { title, url, by, kids, time, score } = story;
   // display variables
   const rank = showRank ? <span>{index}.</span> : null;
+  const commentUrl = storyId ? `/item/${storyId}` : "#";
   // some stories have titles but no urls
-  const titleUrl = url || `/item/${storyId}`;
-  const titlePresent = title && title.length > 0;
+  const titleUrl = url || commentUrl;
+  // reactPlaceHolder takes a boolean
+  const titlePresent = title ? true : false;
   const author = `by ${by}`;
   const commentLength = kids ? mapComment(kids.length) : "discuss";
   const timestamp = `${mapToTime(time)}`;
@@ -69,11 +61,11 @@ export const Story = memo(function Story({ storyId, showRank, index }) {
           <LinkWrapper>
             {voteCount}
             {"  "}
-            <Link to={`/item/${storyId}`}>{author}</Link>
+            <Link to={commentUrl}>{author}</Link>
             {"  |  "}
-            <Link to={`/item/${storyId}`}>{timestamp}</Link>
+            <Link to={commentUrl}>{timestamp}</Link>
             {"  |  "}
-            <Link to={`/item/${storyId}`}>{commentLength}</Link>
+            <Link to={commentUrl}>{commentLength}</Link>
           </LinkWrapper>
         </div>
       </StoryWrapper>
