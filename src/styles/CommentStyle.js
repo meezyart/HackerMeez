@@ -1,13 +1,15 @@
 import styled from "styled-components";
 
 export const AddCommentBox = styled.div`
-  display: flex;
-  align-items: start;
-  flex-direction: column;
-  justify-content: space-between;
+
   margin-left: 1.3em;
   margin-top: 0.8em;
   margin-bottom: 1.2em;
+
+  /* a tag displays inline this forces break or flex can be used */
+  a{
+    display: table;
+  }
 `;
 
 export const CommentWrapper = styled.div`

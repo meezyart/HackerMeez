@@ -63,7 +63,7 @@ export const ButtonLink = styled(Link)`
   border: none;
   font-size: 0.8rem;
   font-weight: 600;
-  display: ${props => (props.hidden ? `none` : `inline-block`)}
+  display: ${props => (props.hidden ? `none` : `inline-block`)};
   text-transform: uppercase;
   cursor: pointer;
   &:hover {
@@ -71,10 +71,8 @@ export const ButtonLink = styled(Link)`
   }
 `;
 
-
 export const ContentWrapper = styled.section`
   background: #f6f6f0;
   padding: 0.8em 1.2em 1.5em;
   border-bottom: 2px solid #f68423;
 `;
-

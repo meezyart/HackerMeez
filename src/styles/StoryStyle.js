@@ -12,7 +12,7 @@ export const RankWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-items: end;
-  min-width: ${props => (props.showRank || `2.7em` )};;
+  min-width: ${props => (props.showRank || `2.7em` )};
 `;
 
 export const VoteButton = styled.div`
