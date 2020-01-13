@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReactPlaceholder from "react-placeholder";
-
-import { getItemById as getComment } from "../services/hnAPI";
+import { useFetchItemsByIds } from "../hooks";
 import { mapToTime } from "../utils";
 import { UP_ARROW } from "../constants";
 import "react-placeholder/lib/reactPlaceholder.css";
@@ -14,17 +13,9 @@ import {
 } from "../styles/CommentStyle";
 
 export const Comment = ({ commentId }) => {
-  const [comment, setComment] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    getComment(commentId)
-      .then(data => setComment(data))
-      .catch(error => {
-        console.log("Comment: We are getting this error:");
-        console.error(error);
-      });
-  }, [commentId]);
+  // returns comment object fetched by the id
+  const comment = useFetchItemsByIds(commentId);
 
   const toggleVisible = () => {
     setIsVisible(!isVisible);
@@ -68,11 +59,13 @@ const CommentHeader = ({ kids, by, time, toggleVisible, isVisible }) => {
 };
 
 const CommentBody = ({ text, kids, time }) => {
+  // reactPlaceHolder needs a boolean 
+  const commentPresent = time ? true : false;
   return (
     <ReactPlaceholder
       type="text"
       showLoadingAnimation={true}
-      ready={time}
+      ready={commentPresent}
       rows={1}
       color="#E0E0E0">
       <CommentParent>
