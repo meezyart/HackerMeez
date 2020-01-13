@@ -18,7 +18,7 @@ export const App = () => {
           <Switch>
             <Route exact path="/" render={() => <Redirect to="/new/0" />} />
             <Route path="/new/:page(\d+)" component={StoryList} />
-            <Route path="/item/:itemId" component={StoryDetail} />
+            <Route path="/item/:itemId(\d+)" component={StoryDetail} />
             <Route component={Error404} />
           </Switch>
         </BrowserRouter>

@@ -16,12 +16,13 @@ export default function StoryList() {
   let startStory = LINKS_PER_PAGE * currentPage;
   let endStory = LINKS_PER_PAGE + startStory;
   let storySet = storyIds.slice(startStory, endStory);
-  let storySetLoaded = storySet.length > 0;
+  // reactPlaceHolder takes a boolean
+  let storySetLoaded = storySet ? true :false;
 
-  // For more button
+  // For more button: it hides when there are no more stories
   let hasMore = endStory < MAX_STORIES;
-  const moreLink = `/new/${currentPage + 1}`;
-  
+  const moreLink = `/new/${currentPage + 1}` ;
+
   // edge case If someone types in /new/(number > max pages)
   const noStoriesLeft =
     !hasMore && storyIds.length > 0 && storySet.length === 0;
